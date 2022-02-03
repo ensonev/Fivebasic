@@ -17,7 +17,8 @@ def apioverview(request):
     api_urls ={
    
         'registration':'/register',
-        'update registered data':'register/<int:pk>'
+        'update registered data':'register/<int:pk>',
+        'user login though username and password':'/login'
     }
     return Response(api_urls)
 
@@ -70,6 +71,8 @@ class loginToken(ObtainAuthToken):
 
     def post(self, request, *args, **kwargs):
         result = super().post(request, *args, **kwargs)
+        print(super())
+        print(result,'kkkkkkk')
         token = Token.objects.get(key=result.data['token'])
         update_last_login(None, token.user)
         return result    
