@@ -72,7 +72,14 @@ class loginToken(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
         result = super().post(request, *args, **kwargs)
         print(super())
-        print(result,'kkkkkkk')
+        print(result.data,'kkkkkkk')
+        data={}
         token = Token.objects.get(key=result.data['token'])
+        print(type(token.user))
+        data['username']=token.user.username
+        data['first_name']=token.user.first_name
+        data['last_name']=token.user.last_name
+        data['email']=token.user.email
+        data['token']=result.data['token']
         update_last_login(None, token.user)
-        return result    
+        return Response(data)
