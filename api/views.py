@@ -18,7 +18,8 @@ def apioverview(request):
    
         'registration':'/register',
         'update registered data':'register/<int:pk>',
-        'user login though username and password':'/login'
+        'user login though username and password':'/login',
+        'user existing or not':'/username-exist-or-not'
     }
     return Response(api_urls)
 
@@ -83,3 +84,18 @@ class loginToken(ObtainAuthToken):
         data['token']=result.data['token']
         update_last_login(None, token.user)
         return Response(data)
+
+class userExistOrNot(APIView): 
+    def post(self,request,format=None):
+        a= request.data
+        print(a,'kkkkkkkkkkkkkkkkk')  
+        try:  
+            usercheck = User.objects.get(username = request.data['username']) 
+            print(usercheck) 
+            data={}
+            data['first_name']=usercheck.first_name
+            data['last_name']=usercheck.last_name
+            return Response({'userdata':data,'status':True})
+        except:
+            return Response({'status':False})      
+             
